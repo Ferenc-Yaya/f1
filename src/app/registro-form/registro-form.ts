@@ -24,6 +24,16 @@ interface TareaCriticaItem {
   factoresBajo: FactorAlerta[];
 }
 
+interface PeligroItem {
+  nombre: string;
+  seleccionada: boolean;
+}
+
+interface TipoPeligro {
+  tipo: string;
+  peligros: PeligroItem[];
+}
+
 @Component({
   selector: 'app-registro-form',
   imports: [FormsModule],
@@ -279,7 +289,160 @@ export class RegistroForm implements OnInit {
     },
   ];
 
+  tiposPeligro: TipoPeligro[] = [
+    {
+      tipo: '1. Físicos',
+      peligros: [
+        { nombre: 'Ruido', seleccionada: false },
+        { nombre: 'Fuentes de Radiación No Ionizante (Campo Electromagnético, otros)', seleccionada: false },
+        { nombre: 'Fuentes de Radiación Ionizante (Fuentes radioactivas)', seleccionada: false },
+        { nombre: 'Iluminación', seleccionada: false },
+        { nombre: 'Radiación solar', seleccionada: false },
+        { nombre: 'Vibración', seleccionada: false },
+        { nombre: 'Temperaturas extremas (frío, calor)', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '2. Químicos',
+      peligros: [
+        { nombre: 'Polvos', seleccionada: false },
+        { nombre: 'Humos / Humos metálicos', seleccionada: false },
+        { nombre: 'Neblinas', seleccionada: false },
+        { nombre: 'Gases y vapores', seleccionada: false },
+        { nombre: 'Sustancias y materiales Inflamables', seleccionada: false },
+        { nombre: 'Sustancias Tóxicas', seleccionada: false },
+        { nombre: 'Sustancias Cancerígenas/Mutagénicas', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '3. Biológicos',
+      peligros: [
+        { nombre: 'Otros animales silvestres y/o domésticos', seleccionada: false },
+        { nombre: 'Vectores (roedores, insectos que transmiten enfermedades)', seleccionada: false },
+        { nombre: 'Virus/Bacterias (Secreciones corporales, higiene personal, residuos biomédicos, otros)', seleccionada: false },
+        { nombre: 'Hongos (SSHH/Duchas sin limpieza, otros)', seleccionada: false },
+        { nombre: 'Parásitos (alimentos contaminados, agua no tratada, otros)', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '4. Mecánico',
+      peligros: [
+        { nombre: 'Cargas suspendidas - Equipos de Izaje (Grúa, telejander, camión grúa, monta carga, otros)', seleccionada: false },
+        { nombre: 'Fluidos y equipos a alta presión', seleccionada: false },
+        { nombre: 'Fluidos, superficies, objetos a alta temperatura', seleccionada: false },
+        { nombre: 'Herramientas neumáticas/hidráulicas/eléctricas/manuales', seleccionada: false },
+        { nombre: 'Sistemas de izaje (Poleas, tecles, polipasto, otros)', seleccionada: false },
+        { nombre: 'Objetos en altura', seleccionada: false },
+        { nombre: 'Maquinarias y partes en movimiento rotativo (Cortadora, fresadora, poleas, ejes, manivelas, etc.)', seleccionada: false },
+        { nombre: 'Vehículos o equipos en movimiento (Traslado de vehículos livianos / traslado de equipos y maquinaria pesada)', seleccionada: false },
+        { nombre: 'Objetos en el suelo', seleccionada: false },
+        { nombre: 'Objetos de oficina, utilerías punzo cortantes (tijeras, engrapador, saca grapas, faster, etc.)', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '5. Eléctrico',
+      peligros: [
+        { nombre: 'Electricidad estática', seleccionada: false },
+        { nombre: 'Alta tensión (mayores de 35kV)', seleccionada: false },
+        { nombre: 'Media Tensión (entre 1Kv- 35kV)', seleccionada: false },
+        { nombre: 'Baja Tensión (menor a 1kV)', seleccionada: false },
+        { nombre: 'Potencial incendio eléctrico', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '6. Locativos',
+      peligros: [
+        { nombre: 'Espacio confinado', seleccionada: false },
+        { nombre: 'Espacio restringido', seleccionada: false },
+        { nombre: 'Zanjas/Excavaciones', seleccionada: false },
+        { nombre: 'Persona en altura o cercana a desniveles', seleccionada: false },
+        { nombre: 'Superficie irregular o accidentado, pisos resbaladizos y disparejos', seleccionada: false },
+        { nombre: 'Talud inestable', seleccionada: false },
+        { nombre: 'Zonas remotas alejadas (Caminos de herradura, lagunas, líneas de transmisión)', seleccionada: false },
+        { nombre: 'Cuerpos de agua (lagunas, ríos)', seleccionada: false },
+        { nombre: 'Cargas o apilamientos inseguros', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '7. Climáticos y del Entorno',
+      peligros: [
+        { nombre: 'Condiciones climáticas adversas (lluvia, vientos)', seleccionada: false },
+        { nombre: 'Inundaciones', seleccionada: false },
+        { nombre: 'Sismos', seleccionada: false },
+        { nombre: 'Tormentas eléctricas (rayos)', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '8. Disergonómicos',
+      peligros: [
+        { nombre: 'Posturas inadecuadas', seleccionada: false },
+        { nombre: 'Objetos pesados', seleccionada: false },
+        { nombre: 'Movimientos repetitivos/forzados', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '9. Psicosociales',
+      peligros: [
+        { nombre: 'Deficiente manejo de la carga laboral', seleccionada: false },
+        { nombre: 'Hostilidad/Hostigamiento', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '10. Protección Física y social',
+      peligros: [
+        { nombre: 'Alcohol/Drogas', seleccionada: false },
+        { nombre: 'Trabajo en / Paso por terrenos de propiedad o en posesión de terceros', seleccionada: false },
+        { nombre: 'Armas', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '11. ASPECTO AMBIENTAL - Recursos',
+      peligros: [
+        { nombre: 'Consumo de agua', seleccionada: false },
+        { nombre: 'Consumo de papel', seleccionada: false },
+        { nombre: 'Consumo de combustible (gasolina, diésel, glp)', seleccionada: false },
+        { nombre: 'Consumo de energía eléctrica', seleccionada: false },
+        { nombre: 'Derrame de Líquidos de Gas Natural', seleccionada: false },
+        { nombre: 'Derrame de Hidrocarburos', seleccionada: false },
+        { nombre: 'Derrame de materiales y sustancias peligrosas', seleccionada: false },
+        { nombre: 'Derrame de agua producción', seleccionada: false },
+        { nombre: 'Derrame de residuos líquidos / sólidos', seleccionada: false },
+        { nombre: 'Generación de efluentes industriales', seleccionada: false },
+        { nombre: 'Generación de efluentes doméstico', seleccionada: false },
+        { nombre: 'Vibración', seleccionada: false },
+        { nombre: 'Radiación No Ionizante (Radiación electromagnética)', seleccionada: false },
+        { nombre: 'Radiación Ionizante (material radioactivo, rayos X)', seleccionada: false },
+        { nombre: 'Uso de Bifenilos Policlorinados (PCB)', seleccionada: false },
+        { nombre: 'Deterioro áreas naturales protegidas o especies', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '12. ASPECTO AMBIENTAL - Residuos',
+      peligros: [
+        { nombre: 'Residuos no peligrosos (papel, cartón, entre otros-especificar)', seleccionada: false },
+        { nombre: 'Generación de Residuos orgánicos', seleccionada: false },
+        { nombre: 'Generación de Residuos metálicos', seleccionada: false },
+        { nombre: 'Generación de residuos peligrosos (tonners, tintas, fluorescentes, residuos con químicos, explosivos, baterías, extintores en desuso, Lodos)', seleccionada: false },
+        { nombre: 'Residuos biomédicos', seleccionada: false },
+      ],
+    },
+    {
+      tipo: '13. ASPECTO AMBIENTAL - Aire',
+      peligros: [
+        { nombre: 'Ruido', seleccionada: false },
+        { nombre: 'Emisión de gases de combustión (SOx, NOx, CO, CO2, COx - diferentes de los vehículos)', seleccionada: false },
+        { nombre: 'Potencial emisión de gases refrigerantes', seleccionada: false },
+        { nombre: 'Potencial Incendio', seleccionada: false },
+        { nombre: 'Potencial Explosión', seleccionada: false },
+        { nombre: 'Emisión de sustancias tóxicas (CFC´s, dioxinas, COV´s, compuestos clorados, SFG, otros)', seleccionada: false },
+        { nombre: 'Potencial fuga de gas natural', seleccionada: false },
+        { nombre: 'Potencial fuga de GLP', seleccionada: false },
+      ],
+    },
+  ];
+
   editandoId: number | null = null;
+  modalPeligroIndex: number | null = null;
 
   constructor(
     private router: Router,
@@ -317,6 +480,14 @@ export class RegistroForm implements OnInit {
           for (const tarea of this.tareasCriticas) {
             const allFactores = [...tarea.factoresAlto, ...tarea.factoresMedio, ...tarea.factoresBajo];
             const item = allFactores.find((f) => f.nombre === fa.factor);
+            if (item) {
+              item.seleccionada = true;
+            }
+          }
+        }
+        for (const p of reg.peligros) {
+          for (const tp of this.tiposPeligro) {
+            const item = tp.peligros.find((pel) => pel.nombre === p.peligro);
             if (item) {
               item.seleccionada = true;
             }
@@ -465,6 +636,13 @@ export class RegistroForm implements OnInit {
       }
     }
 
+    const peligros: { tipo: string; peligro: string }[] = [];
+    for (const tp of this.tiposPeligro) {
+      for (const p of tp.peligros.filter((p) => p.seleccionada)) {
+        peligros.push({ tipo: tp.tipo, peligro: p.nombre });
+      }
+    }
+
     const data = {
       descripcion: this.descripcion,
       usuarioSolicitante: this.usuarioSolicitante,
@@ -474,6 +652,7 @@ export class RegistroForm implements OnInit {
       tipoTrabajo: this.tipoTrabajo,
       tareasCriticas,
       factoresAlerta,
+      peligros,
     };
 
     if (this.editandoId !== null) {
@@ -500,5 +679,25 @@ export class RegistroForm implements OnInit {
 
   volver() {
     this.router.navigate(['/home']);
+  }
+
+  abrirModalPeligro(index: number) {
+    this.modalPeligroIndex = index;
+  }
+
+  cerrarModalPeligro() {
+    this.modalPeligroIndex = null;
+  }
+
+  contarPeligrosSeleccionados(tipoPeligro: TipoPeligro): number {
+    return tipoPeligro.peligros.filter((p) => p.seleccionada).length;
+  }
+
+  totalPeligrosSeleccionados(): number {
+    let count = 0;
+    for (const tp of this.tiposPeligro) {
+      count += tp.peligros.filter((p) => p.seleccionada).length;
+    }
+    return count;
   }
 }

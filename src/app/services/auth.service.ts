@@ -8,7 +8,7 @@ export interface User {
 
 const MOCK_USERS = [
   { username: 'alfredo', password: 'alfredo123', cargo: 'Administrador de Contrato', sede: 'Cerro del Aguila' },
-  { username: 'pedro', password: 'pedro123', cargo: 'Seguridad', sede: 'Cerro del Aguila' },
+  { username: 'pedro', password: 'pedro123', cargo: 'Supervisor EHS', sede: 'Cerro del Aguila' },
 ];
 
 @Injectable({ providedIn: 'root' })
