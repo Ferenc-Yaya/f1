@@ -84,8 +84,11 @@
       }
     </div>
 
-    <!-- Seccion 3: Tareas Criticas -->
-    <h3 style="color: #cc0000;">3. Identificar tareas criticas</h3>
+    <!-- Seccion 3: Determinacion del Nivel de Riesgo -->
+    <h3 style="color: #cc0000;">3. Determinacion del Nivel de Riesgo del Servicio</h3>
+    <p style="color: #666; font-size: 13px; margin-top: 0;">
+      Marque las tareas criticas aplicables y configure sus factores de alerta
+    </p>
 
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
       <thead>
@@ -93,6 +96,7 @@
           <th style="padding: 8px; border: 1px solid #999; width: 40px;"></th>
           <th style="padding: 8px; border: 1px solid #999; text-align: left;">TAREA CRITICA</th>
           <th style="padding: 8px; border: 1px solid #999; width: 160px; text-align: left;">NIVEL DE RIESGO</th>
+          <th style="padding: 8px; border: 1px solid #999; width: 120px; text-align: center;">ACCIONES</th>
         </tr>
       </thead>
       <tbody>
@@ -106,13 +110,22 @@
               {{ tarea.nombre }}
             </td>
             <td style="padding: 8px; border: 1px solid #999;">
-              @if (tarea.seleccionada) {
-                <select [(ngModel)]="tarea.riesgo" [name]="'riesgo_' + i" style="padding: 6px; width: 100%;">
-                  <option value="">-- Nivel --</option>
-                  <option value="ALTO">Alto</option>
-                  <option value="MEDIO">Medio</option>
-                  <option value="BAJO">Bajo</option>
-                </select>
+              @if (tarea.riesgo === 'ALTO') {
+                <span style="background: #f8d7da; color: #721c24; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: bold;">Alto ({{ contarFactores(tarea, 'ALTO') }})</span>
+              } @else if (tarea.riesgo === 'MEDIO') {
+                <span style="background: #fff3cd; color: #856404; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: bold;">Medio ({{ contarFactores(tarea, 'MEDIO') }})</span>
+              } @else if (tarea.riesgo === 'BAJO') {
+                <span style="background: #d4edda; color: #155724; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: bold;">Bajo ({{ contarFactores(tarea, 'BAJO') }})</span>
+              } @else {
+                <span style="color: #999; font-size: 12px;">Sin configurar</span>
+              }
+            </td>
+            <td style="padding: 8px; border: 1px solid #999; text-align: center;">
+              @if (tieneFactores(tarea)) {
+                <button type="button" (click)="abrirModal(i)"
+                        style="padding: 5px 12px; font-size: 12px; cursor: pointer;">
+                  Ver Detalles
+                </button>
               }
             </td>
           </tr>
@@ -120,68 +133,132 @@
       </tbody>
     </table>
 
-    <!-- Factores de Alerta -->
-    <h4 style="margin-top: 0;">OTROS FACTORES DE ALERTA</h4>
-
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
-      <thead>
-        <tr>
-          <th style="padding: 8px; border: 1px solid #999; background: #cc0000; color: #fff; text-align: left;" colspan="2">
-            FACTOR DE ALERTA ALTO
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (fa of factoresAlertaAlto; track fa.nombre; let i = $index) {
-          <tr>
-            <td style="padding: 8px; border: 1px solid #999; width: 40px; text-align: center;">
-              <input type="checkbox" [(ngModel)]="fa.seleccionada" [name]="'fa_alto_' + i" />
-            </td>
-            <td style="padding: 8px; border: 1px solid #999; font-size: 13px;">{{ fa.nombre }}</td>
+    <!-- Cuadro Resumen de Nivel de Riesgo -->
+    @if (tareasSeleccionadas() > 0) {
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+          <tr style="background: #555; color: #fff;">
+            <th style="padding: 8px; border: 1px solid #999; text-align: center;" colspan="4">
+              RESUMEN DE NIVEL DE RIESGO DEL SERVICIO
+            </th>
           </tr>
-        }
-      </tbody>
-    </table>
-
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
-      <thead>
-        <tr>
-          <th style="padding: 8px; border: 1px solid #999; background: #f0ad4e; color: #fff; text-align: left;" colspan="2">
-            FACTOR DE ALERTA MEDIO
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (fa of factoresAlertaMedio; track fa.nombre; let i = $index) {
           <tr>
-            <td style="padding: 8px; border: 1px solid #999; width: 40px; text-align: center;">
-              <input type="checkbox" [(ngModel)]="fa.seleccionada" [name]="'fa_medio_' + i" />
-            </td>
-            <td style="padding: 8px; border: 1px solid #999; font-size: 13px;">{{ fa.nombre }}</td>
+            <th style="padding: 8px; border: 1px solid #999; background: #cc0000; color: #fff; text-align: center; width: 25%;">
+              ALTO
+            </th>
+            <th style="padding: 8px; border: 1px solid #999; background: #f0ad4e; color: #fff; text-align: center; width: 25%;">
+              MEDIO
+            </th>
+            <th style="padding: 8px; border: 1px solid #999; background: #5cb85c; color: #fff; text-align: center; width: 25%;">
+              BAJO
+            </th>
+            <th style="padding: 8px; border: 1px solid #999; background: #333; color: #fff; text-align: center; width: 25%;">
+              NIVEL GLOBAL
+            </th>
           </tr>
-        }
-      </tbody>
-    </table>
-
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-      <thead>
-        <tr>
-          <th style="padding: 8px; border: 1px solid #999; background: #5cb85c; color: #fff; text-align: left;" colspan="2">
-            FACTOR DE ALERTA BAJO
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (fa of otrosFactoresAlerta; track fa.nombre; let i = $index) {
+        </thead>
+        <tbody>
           <tr>
-            <td style="padding: 8px; border: 1px solid #999; width: 40px; text-align: center;">
-              <input type="checkbox" [(ngModel)]="fa.seleccionada" [name]="'fa_otro_' + i" />
+            <td style="padding: 12px; border: 1px solid #999; text-align: center; font-size: 20px; font-weight: bold; color: #cc0000;">
+              {{ contarFactoresPorNivel('ALTO') }}
             </td>
-            <td style="padding: 8px; border: 1px solid #999; font-size: 13px;">{{ fa.nombre }}</td>
+            <td style="padding: 12px; border: 1px solid #999; text-align: center; font-size: 20px; font-weight: bold; color: #f0ad4e;">
+              {{ contarFactoresPorNivel('MEDIO') }}
+            </td>
+            <td style="padding: 12px; border: 1px solid #999; text-align: center; font-size: 20px; font-weight: bold; color: #5cb85c;">
+              {{ contarFactoresPorNivel('BAJO') }}
+            </td>
+            <td style="padding: 12px; border: 1px solid #999; text-align: center; font-size: 16px; font-weight: bold;"
+                [style.background]="nivelGlobal() === 'ALTO' ? '#f8d7da' : nivelGlobal() === 'MEDIO' ? '#fff3cd' : nivelGlobal() === 'BAJO' ? '#d4edda' : '#fff'"
+                [style.color]="nivelGlobal() === 'ALTO' ? '#721c24' : nivelGlobal() === 'MEDIO' ? '#856404' : nivelGlobal() === 'BAJO' ? '#155724' : '#333'">
+              {{ nivelGlobal() || 'Sin configurar' }}
+            </td>
           </tr>
-        }
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    }
+
+    <!-- Modales de Tareas Criticas -->
+    @for (tarea of tareasCriticas; track tarea.nombre; let i = $index) {
+      @if (modalAbiertoIndex === i) {
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center;"
+             (click)="cerrarModal()">
+          <div style="background: #fff; width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; border: 1px solid #999;"
+               (click)="$event.stopPropagation()">
+            <!-- Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: #555; color: #fff;">
+              <h4 style="margin: 0;">{{ tarea.nombre }} - Factores de Alerta</h4>
+              <button type="button" (click)="cerrarModal()"
+                      style="background: none; border: none; color: #fff; font-size: 22px; cursor: pointer;">&times;</button>
+            </div>
+            <!-- Body -->
+            <div style="padding: 16px; display: flex; gap: 12px;">
+              <!-- ALTO -->
+              <div style="flex: 1; border: 1px solid #999;">
+                <div style="padding: 8px; background: #cc0000; color: #fff; font-weight: bold; font-size: 13px;">
+                  FACTOR DE ALERTA ALTO
+                </div>
+                <div style="padding: 8px;">
+                  @if (tarea.factoresAlto.length === 0) {
+                    <span style="color: #999; font-size: 12px; font-style: italic;">Sin factores</span>
+                  }
+                  @for (factor of tarea.factoresAlto; track factor.nombre; let fi = $index) {
+                    <div style="display: flex; align-items: flex-start; gap: 6px; padding: 4px 0; font-size: 13px;">
+                      <input type="checkbox" [(ngModel)]="factor.seleccionada"
+                             [name]="'modal_alto_' + i + '_' + fi" />
+                      <span>{{ factor.nombre }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+              <!-- MEDIO -->
+              <div style="flex: 1; border: 1px solid #999;">
+                <div style="padding: 8px; background: #f0ad4e; color: #fff; font-weight: bold; font-size: 13px;">
+                  FACTOR DE ALERTA MEDIO
+                </div>
+                <div style="padding: 8px;">
+                  @if (tarea.factoresMedio.length === 0) {
+                    <span style="color: #999; font-size: 12px; font-style: italic;">Sin factores</span>
+                  }
+                  @for (factor of tarea.factoresMedio; track factor.nombre; let fi = $index) {
+                    <div style="display: flex; align-items: flex-start; gap: 6px; padding: 4px 0; font-size: 13px;">
+                      <input type="checkbox" [(ngModel)]="factor.seleccionada"
+                             [name]="'modal_medio_' + i + '_' + fi" />
+                      <span>{{ factor.nombre }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+              <!-- BAJO -->
+              <div style="flex: 1; border: 1px solid #999;">
+                <div style="padding: 8px; background: #5cb85c; color: #fff; font-weight: bold; font-size: 13px;">
+                  FACTOR DE ALERTA BAJO
+                </div>
+                <div style="padding: 8px;">
+                  @if (tarea.factoresBajo.length === 0) {
+                    <span style="color: #999; font-size: 12px; font-style: italic;">Sin factores</span>
+                  }
+                  @for (factor of tarea.factoresBajo; track factor.nombre; let fi = $index) {
+                    <div style="display: flex; align-items: flex-start; gap: 6px; padding: 4px 0; font-size: 13px;">
+                      <input type="checkbox" [(ngModel)]="factor.seleccionada"
+                             [name]="'modal_bajo_' + i + '_' + fi" />
+                      <span>{{ factor.nombre }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+            <!-- Footer -->
+            <div style="padding: 10px 16px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #ccc;">
+              <button type="button" (click)="cerrarModal()"
+                      style="padding: 8px 20px; font-size: 13px; cursor: pointer;">Cerrar</button>
+              <button type="button" (click)="guardarModal(tarea)"
+                      style="padding: 8px 20px; font-size: 13px; cursor: pointer;">Guardar</button>
+            </div>
+          </div>
+        </div>
+      }
+    }
 
     <!-- Botones -->
     <div style="display: flex; gap: 10px;">
