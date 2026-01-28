@@ -1,0 +1,76 @@
+<div style="padding: 20px; max-width: 900px; margin: 0 auto;">
+
+  <!-- Encabezado Kallpa -->
+  <div style="border: 1px solid #999; margin-bottom: 20px;">
+    <table style="width: 100%; border-collapse: collapse;">
+      <tr>
+        <td rowspan="2" style="width: 120px; padding: 10px; border-right: 1px solid #999; text-align: center; vertical-align: middle;">
+          <strong style="font-size: 18px; color: #5b2d8e;">kallpa</strong>
+        </td>
+        <td style="padding: 10px; text-align: center; vertical-align: middle;">
+          <strong>CONTROL DE MEDIO AMBIENTE, SALUD Y SEGURIDAD PARA CONTRATISTAS</strong><br /><br />
+          <strong>TERMINOS DE REFERENCIA EHS PARA EL SERVICIO - F1</strong>
+        </td>
+        <td style="width: 50px; text-align: center; vertical-align: middle;">
+          <button (click)="cerrarSesion()" style="padding: 6px 12px; cursor: pointer;">
+            Cerrar Sesion
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Info del usuario -->
+  @if (user) {
+    <div style="background: #f5f5f5; padding: 16px; border: 1px solid #ddd; margin-bottom: 20px;">
+      <p style="margin: 0 0 6px;"><strong>Usuario:</strong> {{ user.username }}</p>
+      <p style="margin: 0 0 6px;"><strong>Cargo:</strong> {{ user.cargo }}</p>
+      <p style="margin: 0;"><strong>Sede:</strong> {{ user.sede }}</p>
+    </div>
+  }
+
+  <hr />
+
+  <div style="margin: 16px 0;">
+    <button (click)="agregarF1()" style="padding: 10px 20px; font-size: 14px; cursor: pointer;">
+      Agregar F1
+    </button>
+  </div>
+
+  <!-- Tabla -->
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #eee; text-align: left;">
+        <th style="padding: 8px; border: 1px solid #ccc;">#</th>
+        <th style="padding: 8px; border: 1px solid #ccc;">Descripcion del Servicio</th>
+        <th style="padding: 8px; border: 1px solid #ccc;">Solicitante</th>
+        <th style="padding: 8px; border: 1px solid #ccc;">Fecha</th>
+        <th style="padding: 8px; border: 1px solid #ccc;">Sede</th>
+        <th style="padding: 8px; border: 1px solid #ccc;">Tipo de Trabajo</th>
+        <th style="padding: 8px; border: 1px solid #ccc;">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (reg of registros; track reg.id) {
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ccc;">{{ reg.id }}</td>
+          <td style="padding: 8px; border: 1px solid #ccc;">{{ reg.descripcion }}</td>
+          <td style="padding: 8px; border: 1px solid #ccc;">{{ reg.usuarioSolicitante }}</td>
+          <td style="padding: 8px; border: 1px solid #ccc;">{{ reg.fechaSolicitud }}</td>
+          <td style="padding: 8px; border: 1px solid #ccc;">{{ reg.sede }}</td>
+          <td style="padding: 8px; border: 1px solid #ccc;">{{ reg.tipoTrabajo }}</td>
+          <td style="padding: 8px; border: 1px solid #ccc;">
+            <button (click)="editar(reg)" style="margin-right: 6px; cursor: pointer;">Editar</button>
+            <button (click)="eliminar(reg.id)" style="cursor: pointer;">Eliminar</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7" style="padding: 12px; text-align: center; border: 1px solid #ccc;">
+            No hay registros
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,196 @@
+<div style="padding: 20px; max-width: 900px; margin: 0 auto;">
+
+  <!-- Seccion 1: Informacion General -->
+  <h3 style="color: #cc0000;">1. Informacion general</h3>
+
+  <form (ngSubmit)="guardar()">
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+      <tr>
+        <td style="padding: 8px; border: 1px solid #999; font-weight: bold;" colspan="4">
+          Descripcion del Servicio
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #999;" colspan="4">
+          <input type="text" [(ngModel)]="descripcion" name="descripcion" required
+                 style="width: 100%; padding: 6px; box-sizing: border-box;" />
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #999; width: 25%;">
+          <strong>Usuario Solicitante:</strong><br />
+        </td>
+        <td style="padding: 8px; border: 1px solid #999; width: 25%;">
+          <input type="text" [(ngModel)]="usuarioSolicitante" name="usuarioSolicitante" required
+                 style="width: 100%; padding: 6px; box-sizing: border-box;" />
+        </td>
+        <td style="padding: 8px; border: 1px solid #999; width: 20%;">
+          <strong>Fecha de solicitud:</strong>
+        </td>
+        <td style="padding: 8px; border: 1px solid #999; width: 30%;">
+          <input type="date" [(ngModel)]="fechaSolicitud" name="fechaSolicitud" required
+                 style="padding: 6px;" />
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #999;">
+          <strong>Administrador(es) de Contrato:</strong><br />
+        </td>
+        <td style="padding: 8px; border: 1px solid #999;" colspan="3">
+          <input type="text" [(ngModel)]="administradorContrato" name="administradorContrato"
+                 style="width: 100%; padding: 6px; box-sizing: border-box;" />
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #999;">
+          <strong>Sede(s):</strong>
+        </td>
+        <td style="padding: 8px; border: 1px solid #999;" colspan="3">
+          <input type="text" [(ngModel)]="sede" name="sede"
+                 style="width: 100%; padding: 6px; box-sizing: border-box;" />
+        </td>
+      </tr>
+    </table>
+
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+      <input #fileInput type="file" (change)="onFileSelected($event)" style="display: none;" />
+      <button type="button" (click)="fileInput.click()"
+              style="padding: 10px 20px; font-size: 14px; cursor: pointer;">
+        Adjuntar TDR
+      </button>
+      @if (archivoTdrNombre) {
+        <span style="font-size: 13px; color: #333;">{{ archivoTdrNombre }}</span>
+        <button type="button" (click)="quitarArchivo()"
+                style="padding: 4px 10px; font-size: 12px; cursor: pointer;">X</button>
+      }
+    </div>
+
+    <!-- Seccion 2: Tipo de Trabajo -->
+    <h3 style="color: #cc0000;">2. Selecciona el tipo de trabajo</h3>
+
+    <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px;">
+      <select [(ngModel)]="tipoTrabajo" name="tipoTrabajo"
+              style="padding: 8px; font-size: 14px; min-width: 320px;">
+        <option value="">-- Seleccionar --</option>
+        @for (tipo of tiposTrabajoOptions; track tipo.value) {
+          <option [value]="tipo.value">{{ tipo.label }}</option>
+        }
+      </select>
+
+      @if (tipoTrabajoDescripcion) {
+        <div style="flex: 1; background: #f5f5f5; border: 1px solid #ccc; padding: 10px; font-size: 13px;">
+          {{ tipoTrabajoDescripcion }}
+        </div>
+      }
+    </div>
+
+    <!-- Seccion 3: Tareas Criticas -->
+    <h3 style="color: #cc0000;">3. Identificar tareas criticas</h3>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+      <thead>
+        <tr style="background: #555; color: #fff;">
+          <th style="padding: 8px; border: 1px solid #999; width: 40px;"></th>
+          <th style="padding: 8px; border: 1px solid #999; text-align: left;">TAREA CRITICA</th>
+          <th style="padding: 8px; border: 1px solid #999; width: 160px; text-align: left;">NIVEL DE RIESGO</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (tarea of tareasCriticas; track tarea.nombre; let i = $index) {
+          <tr>
+            <td style="padding: 8px; border: 1px solid #999; text-align: center;">
+              <input type="checkbox" [(ngModel)]="tarea.seleccionada" [name]="'tarea_' + i"
+                     (ngModelChange)="onTareaChange(tarea)" />
+            </td>
+            <td style="padding: 8px; border: 1px solid #999; font-weight: bold; font-size: 13px;">
+              {{ tarea.nombre }}
+            </td>
+            <td style="padding: 8px; border: 1px solid #999;">
+              @if (tarea.seleccionada) {
+                <select [(ngModel)]="tarea.riesgo" [name]="'riesgo_' + i" style="padding: 6px; width: 100%;">
+                  <option value="">-- Nivel --</option>
+                  <option value="ALTO">Alto</option>
+                  <option value="MEDIO">Medio</option>
+                  <option value="BAJO">Bajo</option>
+                </select>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <!-- Factores de Alerta -->
+    <h4 style="margin-top: 0;">OTROS FACTORES DE ALERTA</h4>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+      <thead>
+        <tr>
+          <th style="padding: 8px; border: 1px solid #999; background: #cc0000; color: #fff; text-align: left;" colspan="2">
+            FACTOR DE ALERTA ALTO
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (fa of factoresAlertaAlto; track fa.nombre; let i = $index) {
+          <tr>
+            <td style="padding: 8px; border: 1px solid #999; width: 40px; text-align: center;">
+              <input type="checkbox" [(ngModel)]="fa.seleccionada" [name]="'fa_alto_' + i" />
+            </td>
+            <td style="padding: 8px; border: 1px solid #999; font-size: 13px;">{{ fa.nombre }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+      <thead>
+        <tr>
+          <th style="padding: 8px; border: 1px solid #999; background: #f0ad4e; color: #fff; text-align: left;" colspan="2">
+            FACTOR DE ALERTA MEDIO
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (fa of factoresAlertaMedio; track fa.nombre; let i = $index) {
+          <tr>
+            <td style="padding: 8px; border: 1px solid #999; width: 40px; text-align: center;">
+              <input type="checkbox" [(ngModel)]="fa.seleccionada" [name]="'fa_medio_' + i" />
+            </td>
+            <td style="padding: 8px; border: 1px solid #999; font-size: 13px;">{{ fa.nombre }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+      <thead>
+        <tr>
+          <th style="padding: 8px; border: 1px solid #999; background: #5cb85c; color: #fff; text-align: left;" colspan="2">
+            FACTOR DE ALERTA BAJO
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (fa of otrosFactoresAlerta; track fa.nombre; let i = $index) {
+          <tr>
+            <td style="padding: 8px; border: 1px solid #999; width: 40px; text-align: center;">
+              <input type="checkbox" [(ngModel)]="fa.seleccionada" [name]="'fa_otro_' + i" />
+            </td>
+            <td style="padding: 8px; border: 1px solid #999; font-size: 13px;">{{ fa.nombre }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <!-- Botones -->
+    <div style="display: flex; gap: 10px;">
+      <button type="submit" style="padding: 10px 24px; font-size: 14px; cursor: pointer;">
+        {{ editandoId !== null ? 'Actualizar' : 'Guardar' }}
+      </button>
+      <button type="button" (click)="volver()" style="padding: 10px 24px; font-size: 14px; cursor: pointer;">
+        Volver
+      </button>
+    </div>
+  </form>
+</div>
