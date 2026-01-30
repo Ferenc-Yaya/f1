@@ -34,6 +34,18 @@ interface TipoPeligro {
   peligros: PeligroItem[];
 }
 
+interface RequisitoItem {
+  nombre: string;
+  condicion: string;
+  seleccionada: boolean;
+  comentario: string;
+}
+
+interface CarpetaRequisito {
+  carpeta: string;
+  requisitos: RequisitoItem[];
+}
+
 @Component({
   selector: 'app-registro-form',
   imports: [FormsModule],
@@ -441,8 +453,86 @@ export class RegistroForm implements OnInit {
     },
   ];
 
+  carpetasRequisitos: CarpetaRequisito[] = [
+    {
+      carpeta: '1. Generales',
+      requisitos: [
+        { nombre: 'Anexo 4 - DJ Procedimiento de gestión de contratistas', condicion: 'Obligatorio', seleccionada: false, comentario: '' },
+        { nombre: 'F.ADM.EHS.001-Términos-de-referencia-EHS-del-Servicio---F1', condicion: 'Obligatorio', seleccionada: false, comentario: '' },
+        { nombre: 'F.ADM.EHS.002-Control-de-Personal-Contratista-y-Subcontratista---F2', condicion: 'Obligatorio', seleccionada: false, comentario: '' },
+        { nombre: 'F.ADM.EHS.003-Control-de-Vehiculos--equipos-y-Herramientas---F3', condicion: 'Obligatorio', seleccionada: false, comentario: '' },
+      ],
+    },
+    {
+      carpeta: '2. Requisitos del personal',
+      requisitos: [
+        { nombre: 'SCTR salud y pensión', condicion: 'Obligatorio', seleccionada: false, comentario: '' },
+        { nombre: 'Seguro vida ley', condicion: 'Obligatorio', seleccionada: false, comentario: '' },
+        { nombre: 'CAMO - Certificado de aptitud médica ocupacional', condicion: 'Obligatorio', seleccionada: false, comentario: '' },
+        { nombre: '    CAMO - Ingreso a espacio confinado', condicion: 'Si tarea ESPACIOS CONFINADOS', seleccionada: false, comentario: '' },
+        { nombre: '    CAMO - Trabajo en altura', condicion: 'Si tarea TRABAJO EN ALTURA', seleccionada: false, comentario: '' },
+        { nombre: '    Altura geografía (2500 msnm) certificado anexo o parte del CAMO', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Sicosensométrico para conductores (viajes >150 Km o >2 horas)', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Vacunas: Hepatitis B (Tratamiento de Agua/Residuos/personal de salud)', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Vacunas: Tétano (chatarra/residuos)', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: 'Inducción general y específica del contratista', condicion: 'Obligatorio', seleccionada: false, comentario: '' },
+        { nombre: 'Cargo de entrega RISST Kallpa y contratista', condicion: 'Obligatorio', seleccionada: false, comentario: '' },
+        { nombre: 'Formato de entrega EPP y equipos de emergencia', condicion: 'Obligatorio', seleccionada: false, comentario: '' },
+        { nombre: 'Capacitaciones generales: Permiso de trabajo, ATS, plan de contingencias, manejo de residuos', condicion: 'Obligatorio', seleccionada: false, comentario: '' },
+        { nombre: 'Capacitaciones específicas (Internas) - RM 050-2013-TR Antigüedad no mayor a 1 año', condicion: '', seleccionada: false, comentario: '' },
+        { nombre: '    Trabajo en altura', condicion: 'Si tarea crítica', seleccionada: false, comentario: '' },
+        { nombre: '    Espacio confinado', condicion: 'Si tarea crítica', seleccionada: false, comentario: '' },
+        { nombre: '    Seguridad eléctrica', condicion: 'Si tarea crítica', seleccionada: false, comentario: '' },
+        { nombre: '    Izaje de cargas', condicion: 'Si tarea crítica', seleccionada: false, comentario: '' },
+        { nombre: '    Excavación', condicion: 'Si tarea crítica', seleccionada: false, comentario: '' },
+        { nombre: '    Trabajo con químicos', condicion: 'Si tarea crítica', seleccionada: false, comentario: '' },
+        { nombre: '    Trabajo en caliente', condicion: 'Si tarea crítica', seleccionada: false, comentario: '' },
+        { nombre: '    Supervivencia en alta montaña', condicion: 'Si tarea crítica', seleccionada: false, comentario: '' },
+        { nombre: '    Bloqueo y etiquetado', condicion: 'Si tarea crítica', seleccionada: false, comentario: '' },
+        { nombre: '    Rescate hombre al agua', condicion: 'Si tarea crítica', seleccionada: false, comentario: '' },
+        { nombre: 'Certificados (Externo) - Antigüedad no mayor a 1 año', condicion: '', seleccionada: false, comentario: '' },
+        { nombre: '    Armado de andamio', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Operador de grúa', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Operador de manlift / elevador vertical', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Operador de maquinaria pesada', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Rigger', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Electricista calificado NFPA 70E', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Buzo emitida por DICAPI', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    IRATA (Trabajos verticales)', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Otros certificados externos', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: 'Entrenamiento específico - RM 050-2013-TR Antigüedad no mayor a 6 meses', condicion: '', seleccionada: false, comentario: '' },
+        { nombre: '    Vigía de espacio confinado / Cert. equipo medición gases', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Vigía de fuego', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Vigía de tránsito (paletero)', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Vigía de dique', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Otros entrenamientos específicos', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: 'CV del personal / Curriculum Supervisión Operativa y EHS', condicion: '', seleccionada: false, comentario: '' },
+        { nombre: '    Operador de equipo de izaje', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Rigger', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Conductor de camiones', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Operador equipo movimiento de tierra', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Conductor de transporte de personal', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Electricista', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Rescatista', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Médico', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Paramédico', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Otros CV', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: 'Personal especializado EHS y emergencias', condicion: '', seleccionada: false, comentario: '' },
+        { nombre: '    Supervisor EHS (NR Alto) - Ing. titulado, 5 años exp.', condicion: 'Obligatorio riesgo alto', seleccionada: false, comentario: '' },
+        { nombre: '    Supervisor EHS (NR Medio) - sujeto a evaluación', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Rescatista altura (IRATA o APETAC 2)', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Rescatista cuerpo de agua (cert. rescate en agua, 5 años exp.)', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Rescatista zonas remotas (guía alta montaña, 5 años exp.)', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Médico (titulado, colegiado, PHTLS y BLS)', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Paramédico (téc. enfermería, PHTLS y BLS)', condicion: 'Opcional', seleccionada: false, comentario: '' },
+        { nombre: '    Paramédico conductor de ambulancia (lic. AII A)', condicion: 'Opcional', seleccionada: false, comentario: '' },
+      ],
+    },
+  ];
+
   editandoId: number | null = null;
   modalPeligroIndex: number | null = null;
+  modalRequisitoIndex: number | null = null;
 
   constructor(
     private router: Router,
@@ -699,5 +789,17 @@ export class RegistroForm implements OnInit {
       count += tp.peligros.filter((p) => p.seleccionada).length;
     }
     return count;
+  }
+
+  abrirModalRequisito(index: number) {
+    this.modalRequisitoIndex = index;
+  }
+
+  cerrarModalRequisito() {
+    this.modalRequisitoIndex = null;
+  }
+
+  contarRequisitosSeleccionados(carpeta: CarpetaRequisito): number {
+    return carpeta.requisitos.filter((r) => r.seleccionada).length;
   }
 }
